@@ -1,9 +1,57 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const { v4: uuidv4 } = require('uuid');
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+let configCache = null
+
+let globalPanel = null
+
+function init_panel(context) {
+    const panel = vscode.window.createWebviewPanel(
+        panelId, 
+        'Code Meta Note', 
+        vscode.ViewColumn.Two, 
+        {
+            enableScripts: true,
+            retainContextWhenHidden: true
+        }
+    );
+
+    panel.webview.html = `
+    <html>
+    <body>
+        <textarea id="editor" style="width:600px;height:600px"></textarea>
+        <script>
+            const vscode = acquireVsCodeApi();
+
+            const editor = document.getElementById('editor');
+
+            editor.addEventListener('input', event => {
+                vscode.postMessage({
+                    command: 'updateText',
+                    text: event.target.value
+                });
+            });
+            
+        </script>
+    </body>
+    </html>
+    `;
+
+    globalPanel = panel
+
+    globalPanel.webview.onDidReceiveMessage(
+        message => {
+            console.log(message)
+        },
+        undefined,
+        context.subscriptions
+    );
+
+    globalPanel.onDidDispose(() => {
+        console.log('WebviewPanel disposed.');
+        globalPanel = null
+    });
+}
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -11,60 +59,28 @@ const vscode = require('vscode');
 function activate(context) {
 
 	let openFile = vscode.commands.registerCommand('code-meta-ext.openFile', function () {
-		// The code you place here will be executed every time the command is executed
+        let workspaceDir = vscode.workspace.workspaceFolders[0];
+        let fpath = vscode.Uri.joinPath(workspaceDir.uri, 's_config.json');
 
-		// Get the currently opened workspace folder
-		let workspaceFolder = vscode.workspace.workspaceFolders[0];
+        if (!globalPanel) {
+            panelId  = `code-meta-${uuidv4}`
 
-		// Define the file path to read within the workspace folder
-		let fpath = vscode.Uri.joinPath(workspaceFolder.uri, 's_config.json');
-		console.log(fpath)
-
-        // Read the file using the `readFile` method of the `vscode.workspace.fs` API
-        vscode.workspace.fs.readFile(fpath)
+            vscode.workspace.fs.readFile(fpath)
             .then(content => {
-                // Convert the content to a string
-                let fContent = new TextDecoder().decode(content);
+                configCache = content
 
-                // Display the file content in a new editor
-                vscode.workspace.openTextDocument({ content: fContent })
-                    .then(document => {
-                        vscode.window.showTextDocument(document, { viewColumn: vscode.ViewColumn.Two });
-                    });
+                init_panel(context)
             })
             .catch(error => {
                 console.error(error);
             });
-
+        }else {
+            globalPanel.reveal(vscode.ViewColumn.Two, true);
+        }
 	});
 
-
 	let closeFile = vscode.commands.registerCommand('code-meta-ext.closeFile', function () {
-		// The code you place here will be executed every time the command is executed
-
-		// Get the currently opened workspace folder
-		let workspaceFolder = vscode.workspace.workspaceFolders[0];
-
-		// Define the file path to read within the workspace folder
-		let fpath = vscode.Uri.joinPath(workspaceFolder.uri, 's_config.json');
-		console.log(fpath)
-
-        // Read the file using the `readFile` method of the `vscode.workspace.fs` API
-        vscode.workspace.fs.readFile(fpath)
-            .then(content => {
-                // Convert the content to a string
-                let fContent = new TextDecoder().decode(content);
-
-                // Display the file content in a new editor
-                vscode.workspace.openTextDocument({ content: fContent })
-                    .then(document => {
-                        vscode.window.showTextDocument(document, { viewColumn: vscode.ViewColumn.Two });
-                    });
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
+        globalPanel.dispose()
 	});
 
 	context.subscriptions.push(openFile, closeFile);
