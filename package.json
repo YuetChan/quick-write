@@ -14,27 +14,20 @@
   "contributes": {
     "keybindings": [
       {
-        "command": "code-meta-ext.openFile",
+        "command": "code-meta-ext.openNote",
         "key": "ctrl+f1",
-        "mac": "cmd+f1",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "code-meta-ext.closeFile",
-        "key": "ctrl+f2",
-        "mac": "cmd+f2",
-        "when": "editorTextFocus"
+        "mac": "cmd+f1"
       }
     ],
     "commands": [
       {
-        "command": "code-meta-ext.openFile",
+        "command": "code-meta-ext.openNote",
         "title": "open file",
         "category": "code-meta"
       },
       {
-        "command": "code-meta-ext.closeFile",
-        "title": "close file",
+        "command": "code-meta-ext.clearCache",
+        "title": "clear cache",
         "category": "code-meta"
       }
     ]
