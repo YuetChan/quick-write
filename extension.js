@@ -14,14 +14,6 @@ let dataJson = null
 let currentRelativePath = null
 
 
-vscode.window.onDidChangeActiveTextEditor(editor => {
-    if(editor && editor.document && globalPanel) {
-        currentRelativePath = path.relative(workspaceDir.fsPath, editor.document.fileName)
-        postCurrentFilenameAndData(`./${currentRelativePath}`, dataJson[`./${currentRelativePath}`])
-    }
-});
-
-
 async function showFileDialog() {
     const options = vscode.OpenDialogOptions = {
       canSelectFiles: true,
@@ -146,6 +138,13 @@ function initPanel(context) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+    vscode.window.onDidChangeActiveTextEditor(editor => {
+        if(editor && editor.document && globalPanel) {
+            currentRelativePath = path.relative(workspaceDir.fsPath, editor.document.fileName)
+            postCurrentFilenameAndData(`./${currentRelativePath}`, dataJson[`./${currentRelativePath}`])
+        }
+    });
+    
     const workspaceState = context.workspaceState;
 
     let configFpath = null
