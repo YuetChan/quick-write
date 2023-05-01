@@ -1,6 +1,6 @@
 {
-  "name": "code-meta-ext",
-  "displayName": "code-meta-ext",
+  "name": "quick-write",
+  "displayName": "quick-write",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -14,19 +14,19 @@
   "contributes": {
     "keybindings": [
       {
-        "command": "code-meta-ext.openNote",
+        "command": "quick-write.openNote",
         "key": "ctrl+f1",
         "mac": "cmd+f1"
       }
     ],
     "commands": [
       {
-        "command": "code-meta-ext.openNote",
+        "command": "quick-write.openNote",
         "title": "open file",
         "category": "code-meta"
       },
       {
-        "command": "code-meta-ext.clearCache",
+        "command": "quick-write.clearCache",
         "title": "clear cache",
         "category": "code-meta"
       }
@@ -41,7 +41,7 @@
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
-    "@types/vscode": "^1.77.0",
+    "@types/vscode": "^1.52.0",
     "@vscode/test-electron": "^2.3.0",
     "eslint": "^8.36.0",
     "glob": "^8.1.0",
@@ -51,5 +51,19 @@
   },
   "dependencies": {
     "uuidv4": "^6.2.13"
+  },
+  "repository": {
+    "name": "quick-write",
+    "displayName": "Quick Write",
+    "description": "Quick Write extension",
+    "version": "1.0.0",
+    "publisher": "yuetchan",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/YuetChan/quick-write.git"
+    }
   }
+  
+
+
 }

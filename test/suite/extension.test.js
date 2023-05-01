@@ -16,10 +16,10 @@ suite('Extension Test Suite', () => {
 		const context = {
 		  workspaceState: {
 			update: (key, value, target) => {
-			  // Assert that the correct key, value, and target are passed to workspaceState.update
-			  assert.equal(key, 'config_fpath');
-			  assert.equal(value, 'test/config.json');
-			  assert.equal(target, vscode.ConfigurationTarget.Workspace);
+			  	// Assert that the correct key, value, and target are passed to workspaceState.update
+			  	assert.equal(key, 'config_fpath');
+			  	assert.equal(value, 'test/config.json');
+			  	assert.equal(target, vscode.ConfigurationTarget.Workspace);
 			}
 		  }
 		};

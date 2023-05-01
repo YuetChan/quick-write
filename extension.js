@@ -149,7 +149,7 @@ function activate(context) {
 
     let configFpath = null
 
-	let openNote = vscode.commands.registerCommand('code-meta-ext.openNote', async function () {
+	let openNote = vscode.commands.registerCommand('quick-write.openNote', async function () {
         if(!workspaceState.get('config_fpath')) {
             configFpath = await showFileDialog()
 
@@ -192,7 +192,7 @@ function activate(context) {
 
     
     let clearCache = vscode.commands.registerCommand(
-            'code-meta-ext.clearCache', 
+            'quick-write.clearCache', 
             function () {
                 workspaceState.update('config_fpath', null, vscode.ConfigurationTarget.Workspace);
                 vscode.window.showInformationMessage('Clear config file path cache.');
